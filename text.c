@@ -224,8 +224,13 @@ int main( int argc, char *argv[] )
 		}
 	}
 	else if( argc - optind == 1 )
+	//optind是get_opt的一个全剧变量，初始值为1,循环一次增加1,argc是命令行参数个数，这里比较是如果命令行参数比optind大1说明只有一个参数
+	//也就是只有一个下载连接
 	{
 		axel = axel_new( conf, 0, s );
+		/*这里的axel_new是一个返回值为axel_t结构体的指针，conf是从根据默认文件和命令行参数生成的connf_t类型的指针,0是指只有一个http下载
+		s是指具体下载的url	
+		*/
 		if( axel->ready == -1 )
 		{
 			print_messages( axel );

@@ -55,6 +55,7 @@ int http_connect( http_t *conn, int proto, char *proxy, char *host, int port, ch
 	} }
 	
 	if( ( conn->fd = tcp_connect( host, port, conn->local_if ) ) == -1 )
+	//建立socket连接,返回socket的文件描述符
 	{
 		/* We'll put the message in conn->headers, not in request */
 		sprintf( conn->headers, _("Unable to connect to server %s:%i\n"), host, port );

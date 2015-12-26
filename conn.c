@@ -35,12 +35,17 @@ int conn_set( conn_t *conn, char *set_url )
 	
 	/* protocol://							*/
 	if( ( i = strstr( set_url, "://" ) ) == NULL )
+	//strstr函数 在set_url里面查找第一次出现://,然后返回第一次出现://的指针
+	//这个判断是如果没有发现://那么就默认为ftp协议
 	{
 		conn->proto = PROTO_DEFAULT;
+		//配置conn->proto为PROTO_DEFAULT
 		strncpy( url, set_url, MAX_STRING );
+		//拷贝set_url到url，拷贝长度为MAX_STRING
 	}
 	else
 	{
+		//set_url是url结构体的text字段，是一个字符数组
 		if( set_url[0] == 'f' )
 			conn->proto = PROTO_FTP;
 		else if( set_url[0] == 'h' )
@@ -50,21 +55,31 @@ int conn_set( conn_t *conn, char *set_url )
 			return( 0 );
 		}
 		strncpy( url, i + 3, MAX_STRING );
+		//上面设置i是字符串第一次出现://的指针，要想把://去掉，必须把指针往后移3位，也就是i+3
+		printf("url is %s\n",url);
 	}
 	
 	/* Split							*/
 	if( ( i = strchr( url, '/' ) ) == NULL )
+	//这里是分割url的文件名 如果没有找到/那么就设置conn->dir为/
+	//例如i为www.baidu.com这其中没有/
 	{
 		strcpy( conn->dir, "/" );
 	}
 	else
 	{
+		printf("conn->dir is %s\n",i);
 		*i = 0;
+		//初始化指针
 		snprintf( conn->dir, MAX_STRING, "/%s", i + 1 );
+		//如果在url里面找到/那么就把/后面的复制到conn->dir
+		printf("conn->dir is %s\n",conn->dir);
 		if( conn->proto == PROTO_HTTP )
 			http_encode( conn->dir );
 	}
+	printf("urll is %s\n",url);
 	strncpy( conn->host, url, MAX_STRING );
+	printf("conn->host is %s\n",conn->host);
 	j = strchr( conn->dir, '?' );
 	if( j != NULL )
 		*j = 0;
@@ -217,8 +232,10 @@ int conn_init( conn_t *conn )
 	{
 		conn->http->local_if = conn->local_if;
 		if( !http_connect( conn->http, conn->proto, proxy, conn->host, conn->port, conn->user, conn->pass ) )
+		//建立http连接
 		{
 			conn->message = conn->http->headers;
+			//如果没成功连接tcp连接，那么把错误信息当中header返回给message
 			conn_disconnect( conn );
 			return( 0 );
 		}

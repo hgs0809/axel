@@ -43,10 +43,16 @@ axel_t *axel_new( conf_t *conf, int count, void *url )
 	int i;
 	
 	axel = malloc( sizeof( axel_t ) );
+	//跟axel_t类型的指针，分配内存
 	memset( axel, 0, sizeof( axel_t ) );
+	//用0初始化指针
 	*axel->conf = *conf;
+	//把参数传过来的conf指针，赋给axel->conf指针
+	printf("axel->conf->num_connections is %d\n", axel->conf->num_connections);
 	axel->conn = malloc( sizeof( conn_t ) * axel->conf->num_connections );
+	//axel->conf->num_connections的默认值为4,分配4个conn_t结构体大小的内存给conn
 	memset( axel->conn, 0, sizeof( conn_t ) * axel->conf->num_connections );
+	//用0初始化指针
 	if( axel->conf->max_speed > 0 )
 	{
 		if( (float) axel->conf->max_speed / axel->conf->buffer_size < 0.5 )
@@ -59,12 +65,19 @@ axel_t *axel_new( conf_t *conf, int count, void *url )
 	}
 	if( buffer == NULL )
 		buffer = malloc( max( MAX_STRING, axel->conf->buffer_size ) );
+		//printf("buffer is %d max_string is %d\n",axel->conf->buffer_size,MAX_STRING);
+		//根据axel->conf->buffer_size和MAX_STRING之间的大者进行分配内存
+		//max是在axel.h里面定义的一个宏
+		//axel->conf->buffer_size默认值为5120，MAX_STRING默认值为1024
 	
 	if( count == 0 )
+	//这里是一个判断，conut就是传进来的url个数，如果是0，那就是仅仅传进来一个，所以只需要分配一个url_t结构体大小的内存给axel_url就行
 	{
 		axel->url = malloc( sizeof( url_t ) );
 		axel->url->next = axel->url;
+		//目前还不能理解的事情~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		strncpy( axel->url->text, (char *) url, MAX_STRING );
+		//复制参数传过来的url给axel这个结构体的url->text
 	}
 	else
 	{
@@ -86,7 +99,9 @@ axel_t *axel_new( conf_t *conf, int count, void *url )
 	}
 	
 	axel->conn[0].conf = axel->conf;
+	//把axel的conf结构体赋值给axel->conn的第一个数组的conf
 	if( !conn_set( &axel->conn[0], axel->url->text ) )
+	//根据连接(conn里面只有从axel_new里面获取到的conf结构体)和url 转换成一个conn_t的结构体
 	{
 		axel_message( axel, _("Could not parse URL.\n") );
 		axel->ready = -1;
@@ -95,15 +110,19 @@ axel_t *axel_new( conf_t *conf, int count, void *url )
 
 	axel->conn[0].local_if = axel->conf->interfaces->text;
 	axel->conf->interfaces = axel->conf->interfaces->next;
-	
+
 	strncpy( axel->filename, axel->conn[0].file, MAX_STRING );
+	//复制axel->conn[0].file到axel->filename中
 	http_decode( axel->filename );
+	//暂时没看出来为什么要decode
 	if( *axel->filename == 0 )	/* Index page == no fn		*/
 		strncpy( axel->filename, axel->conf->default_filename, MAX_STRING );
 	if( ( s = strchr( axel->filename, '?' ) ) != NULL && axel->conf->strip_cgi_parameters )
 		*s = 0;		/* Get rid of CGI parameters		*/
 	
 	if( !conn_init( &axel->conn[0] ) )
+	//根据conn链接状态去判断下载类型，然后用ftp_connect或者http_connect初始化链接 不发送http请求
+	//但是得到了conn->fd,就是socket的文件描述符
 	{
 		axel_message( axel, axel->conn[0].message );
 		axel->ready = -1;
@@ -113,12 +132,15 @@ axel_t *axel_new( conf_t *conf, int count, void *url )
 	/* This does more than just checking the file size, it all depends
 	   on the protocol used.					*/
 	if( !conn_info( &axel->conn[0] ) )
+	//根据连接初始化连接的各种数据，包括文件类型，大小等等（获取http头部，然后分析）
 	{
 		axel_message( axel, axel->conn[0].message );
 		axel->ready = -1;
 		return( axel );
 	}
 	s = conn_url( axel->conn );
+	printf("url is %s\n",s);
+	exit(1);
 	strncpy( axel->url->text, s, MAX_STRING );
 	if( ( axel->size = axel->conn[0].size ) != INT_MAX )
 	{
