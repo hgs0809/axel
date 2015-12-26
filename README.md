@@ -81,3 +81,4 @@ void axel_do( axel_t *axel )
    参考http://www.cprogramming.com/reference/preprocessor/define.html
 strchr and strstr的区别
 实现可变函数va_list
+分析到axel.c的115行的conn_info了
