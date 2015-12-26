@@ -79,3 +79,4 @@ void axel_do( axel_t *axel )
    a,定义一个变量替换#define MAX_STRING              1024
    b,定义一个宏#define max( a, b )             ( (a) > (b) ? (a) : (b) )
    参考http://www.cprogramming.com/reference/preprocessor/define.html
+strchr and strstr的区别
