@@ -74,6 +74,7 @@ void axel_do( axel_t *axel )
 
 1，当htt请求头中带Range: bytes=1-后，那么http返回的状态码为HTTP/1.1 206 Partial Content
    参考http://everet.org/http-status-206-partial-content.html
+   
 2, define用法
    a,定义一个变量替换#define MAX_STRING              1024
    b,定义一个宏#define max( a, b )             ( (a) > (b) ? (a) : (b) )
