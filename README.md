@@ -68,3 +68,8 @@ Start downloading
 最主要的核心函数
 axel_do( axel );
 void axel_do( axel_t *axel )
+
+
+学到的知识：
+1，当htt请求头中带Range: bytes=1-后，那么http返回的状态码为HTTP/1.1 206 Partial Content
+   参考http://everet.org/http-status-206-partial-content.html
