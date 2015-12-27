@@ -69,7 +69,8 @@ int conn_set( conn_t *conn, char *set_url )
 	else
 	{
 		printf("conn->dir is %s\n",i);
-		*i = 0;
+		//*i = 0;
+		*i = NULL;
 		//初始化指针
 		snprintf( conn->dir, MAX_STRING, "/%s", i + 1 );
 		//如果在url里面找到/那么就把/后面的复制到conn->dir
@@ -246,6 +247,7 @@ int conn_init( conn_t *conn )
 }
 
 int conn_setup( conn_t *conn )
+//根据配置文件构造http请求头和地址
 {
 	if( conn->ftp->fd <= 0 && conn->http->fd <= 0 )
 		if( !conn_init( conn ) )
@@ -273,6 +275,7 @@ int conn_setup( conn_t *conn )
 		snprintf( s, MAX_STRING, "%s%s", conn->dir, conn->file );
 		conn->http->firstbyte = conn->currentbyte;
 		conn->http->lastbyte = conn->lastbyte;
+		printf("first is %d\nlast is %d\n",conn->currentbyte,conn->lastbyte);
 		http_get( conn->http, s );
 		http_addheader( conn->http, "User-Agent: %s", conn->conf->user_agent );
 		for( i = 0; i < conn->conf->add_header_count; i++)
@@ -299,6 +302,7 @@ int conn_exec( conn_t *conn )
 
 /* Get file size and other information					*/
 int conn_info( conn_t *conn )
+//根据连接初始化连接的各种数据，包括文件类型，大小等等（获取http头部，然后分析）
 {
 	/* It's all a bit messed up.. But it works.			*/
 	if( conn->proto == PROTO_FTP && !conn->proxy )
@@ -335,6 +339,7 @@ int conn_info( conn_t *conn )
 		{
 			conn->currentbyte = 1;
 			if( !conn_setup( conn ) )
+			//conn_setup 根据配置文件构造http请求头和地址
 				return( 0 );
 			conn_exec( conn );
 			conn_disconnect( conn );

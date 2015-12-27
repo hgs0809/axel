@@ -140,6 +140,7 @@ axel_t *axel_new( conf_t *conf, int count, void *url )
 	}
 	s = conn_url( axel->conn );
 	printf("url is %s\n",s);
+	printf("conn->fd is %d\n",axel->conn->fd);
 	exit(1);
 	strncpy( axel->url->text, s, MAX_STRING );
 	if( ( axel->size = axel->conn[0].size ) != INT_MAX )

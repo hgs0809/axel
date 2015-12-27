@@ -102,7 +102,10 @@ void http_get( http_t *conn, char *lurl )
 	else
 	{
 		http_addheader( conn, "GET %s HTTP/1.0", lurl );
+		//构造http请求头
+		//GET /nuomi/wh%3D230%2C140/sign=17ce627096cad1c8d0eef4254c0e4b38/5882b2b7d0a20cf4162d8c8075094b36acaf992b.jpg HTTP/1.0
 		http_addheader( conn, "Host: %s", conn->host );
+		//Host: e.hiphotos.baidu.com
 	}
 	if( *conn->auth )
 		http_addheader( conn, "Authorization: Basic %s", conn->auth );
@@ -112,6 +115,7 @@ void http_get( http_t *conn, char *lurl )
 			http_addheader( conn, "Range: bytes=%lld-%lld", conn->firstbyte, conn->lastbyte );
 		else
 			http_addheader( conn, "Range: bytes=%lld-", conn->firstbyte );
+			//Range: bytes=1-
 	}
 }
 
