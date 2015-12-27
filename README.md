@@ -79,6 +79,9 @@ void axel_do( axel_t *axel )
    a,定义一个变量替换#define MAX_STRING              1024
    b,定义一个宏#define max( a, b )             ( (a) > (b) ? (a) : (b) )
    参考http://www.cprogramming.com/reference/preprocessor/define.html
-strchr and strstr的区别
+3, strchr and strstr的区别
+   strchr是strchr(const char *s, int c);查找一个字符，只能查找一个字符
+   strstr是char *strstr(const char *haystack, const char *needle);查找一个字符串，只能查找字符串
+   相同点两者都是返回查到的字符串或者字符的指针
 实现可变函数va_list
 分析到axel.c的115行的conn_info了
