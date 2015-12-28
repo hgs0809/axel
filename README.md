@@ -83,5 +83,6 @@ void axel_do( axel_t *axel )
    strchr是strchr(const char *s, int c);查找一个字符，只能查找一个字符
    strstr是char *strstr(const char *haystack, const char *needle);查找一个字符串，只能查找字符串
    相同点两者都是返回查到的字符串或者字符的指针
+4, 字符串是以0结尾的，如果一个字符串，你把中间的某个字符修改为0，那么他就变成两个字符串了
 实现可变函数va_list
 分析到axel.c的115行的conn_info了

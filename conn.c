@@ -69,9 +69,14 @@ int conn_set( conn_t *conn, char *set_url )
 	else
 	{
 		printf("conn->dir is %s\n",i);
-		//*i = 0;
-		*i = NULL;
-		//初始化指针
+		*i = 0;
+		//截断字符串，因为字符串以0为结尾，所以当再次访问url时，放到到/时发现是0，那么字符串就结束了
+		//而i+1，是指0后面的所以字符直到最后的0
+		//所以下面一行中用到了i+1
+		//例如xxxxxxxxxxxx0yyyyyyyyyyyy0
+		//             ×i=0 i+1 就是0后面的东西了
+		//这样就把开始的字符串变成了xxxxxx和yyyyyy两个字符串了
+		//这个知识点是字符串以0结尾，遇到0后就认为结束了
 		snprintf( conn->dir, MAX_STRING, "/%s", i + 1 );
 		//如果在url里面找到/那么就把/后面的复制到conn->dir
 		printf("conn->dir is %s\n",conn->dir);
