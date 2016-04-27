@@ -297,7 +297,9 @@ int main( int argc, char *argv[] )
 	{
 		/* Local file existence check					*/
 		i = 0;
-		s = axel->filename + strlen( axel->filename );
+		s = axel->filename + strlen( axel->filename );//把s指向axel->filename的末尾，
+		//这样给s赋值后，它自动就在axel->name里面了
+		//一个数组地址[1,2,3,4,5,6,7,8]  s [4,5,6,7,8]
 		while( 1 )
 		{
 			sprintf( string, "%s.st", axel->filename );
@@ -314,7 +316,8 @@ int main( int argc, char *argv[] )
 				if( access( string, F_OK ) )
 					break;
 			}
-			sprintf( s, ".%i", i );
+			sprintf( s, ".%i", i );//给s赋值，然后就自动指向axel->filename的末尾
+			//然后axel->filename的值就一直变化啦
 			i ++;
 		}
 	}
